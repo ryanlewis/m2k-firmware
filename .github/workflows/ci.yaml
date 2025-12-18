@@ -3,20 +3,24 @@ on:
   push:
     branches:
       - main
+      - 'claude/**'
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Build firmware
-        uses: xanderhendriks/action-build-stm32cubeide@master
+        uses: xanderhendriks/action-build-stm32cubeide@v12.0.0
         with:
           project-path: '/github/workspace/mouse'
           project-target: 'all'
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: m2k_fw_lh
           path: mouse/Release/mouse.bin
