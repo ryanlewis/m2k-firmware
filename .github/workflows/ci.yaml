@@ -15,7 +15,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Build firmware
-        uses: xanderhendriks/action-build-stm32cubeide@v12.0.0
+        uses: xanderhendriks/action-build-stm32cubeide@v16.1
         with:
           project-path: '/github/workspace/mouse'
           project-target: 'all'
