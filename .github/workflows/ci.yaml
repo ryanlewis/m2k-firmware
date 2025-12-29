@@ -18,7 +18,7 @@ jobs:
         uses: xanderhendriks/action-build-stm32cubeide@v16.1
         with:
           project-path: '/github/workspace/mouse'
-          project-target: 'all'
+          project-target: 'mouse/Release'
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
