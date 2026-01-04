@@ -36,6 +36,14 @@
 
 #define TIMEOUT_SECS 5 // seconds of holding buttons for programming mode
 
+// Left-handed mode: swap LMB (bit 0) and RMB (bit 1) for USB output only
+// This preserves physical button positions for configuration combos
+#ifdef M2K_LEFTY_MODE
+#define USB_BTN_SWAP(b) ((((b) & 0b001) << 1) | (((b) & 0b010) >> 1) | ((b) & 0b100))
+#else
+#define USB_BTN_SWAP(b) (b)
+#endif
+
 typedef union {
 	struct __PACKED { // use the order in the report descriptor
 		uint8_t btn;
@@ -338,9 +346,11 @@ int main(void) {
 			// enable endpoint
 			USBx_INEP(1)->DIEPCTL |= USB_OTG_DIEPCTL_CNAK
 					| USB_OTG_DIEPCTL_EPENA;
-			// write to fifo
-			USBx_DFIFO(1) = send.u32[0] & mode_mask[mode & 0b11];
-			USBx_DFIFO(1) = send.u32[1];
+			// write to fifo (apply left-handed button swap for USB output only)
+			Usb_packet usb_out = send;
+			usb_out.btn = USB_BTN_SWAP(send.btn);
+			USBx_DFIFO(1) = usb_out.u32[0] & mode_mask[mode & 0b11];
+			USBx_DFIFO(1) = usb_out.u32[1];
 			count = skip;
 		}
 	}

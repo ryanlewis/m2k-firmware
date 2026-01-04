@@ -23,11 +23,17 @@
 
 #pragma once
 
+// Left-handed mode: swaps LMB/RMB in USB reports only
+// Configuration button combos still use physical button positions
 #define M2K_LEFTY_MODE
 
 #define M2K_USB_MFG "Zaunkoenig"
 #define M2K_USB_NAME "M2K"
+#ifdef M2K_LEFTY_MODE
+#define M2K_FW_VERSION " fw v1.2 (LH)"
+#else
 #define M2K_FW_VERSION " fw v1.2"
+#endif
 #define M2K_USB_PID 0xA3CF
 #define M2K_USB_VID 0x0483
 
@@ -109,6 +115,6 @@
 #define WHL_N_PIN_Pos      12
 #define WHL_N_PIN          (1 << WHL_N_PIN_Pos)
 
-#ifdef M2K_LEFTY_MODE
-#include <lefty_mode.h>
-#endif
+// Note: We no longer include lefty_mode.h which swapped GPIO pins.
+// Instead, button swapping for left-handed mode is done in main.c
+// at the USB output level only, preserving config button behavior.
